@@ -1,7 +1,7 @@
-# Stage 1: Base image for installing dependencies
-FROM python:3.9-slim as base
+# Stage 1: Use a lightweight Python base image
+FROM python:3.9-slim
 
-# Install build dependencies for whisper and PyTorch
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git ffmpeg libsndfile1 build-essential \
     && apt-get clean \
@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory
 WORKDIR /app
 
-# Install Whisper and its dependencies
+# Install minimal Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY . .
 
-# Expose the Flask port
+# Expose Flask port
 EXPOSE 5000
 
 # Command to run the application
